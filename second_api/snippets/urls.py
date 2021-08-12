@@ -9,10 +9,9 @@ router = DefaultRouter()
 router.register(r'snippets', views.SnippetViewSet)
 router.register(r'users', views.UserViewSet)
 
-urlpatterns = router.urls
-# urlpatterns = [
-#     path('', include(router.urls))
-# ]
+urlpatterns = [
+    path('', include(router.urls))
+]
 
 
 
