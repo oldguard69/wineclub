@@ -10,15 +10,15 @@ class Order(models.Model):
         ('cancel', 'Cancel'),
         ('success', 'Success')
     ]
-    status = models.CharField(choices=ORDER_STATUS, default='pending')
+    status = models.CharField(choices=ORDER_STATUS, default='pending', max_length=10)
     total_price = models.FloatField()
     created_date = models.DateField(auto_now_add=True)
     updated_date = models.DateField(auto_now=True)
-    customer = models.ForeignKey(Customer)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     books = models.ManyToManyField(Book, through='OrderDetail')
 
 class OrderDetail(models.Model):
-    order = models.ForeignKey(Order)
-    book = models.ForeignKey(Book)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
     order_qty = models.SmallIntegerField()
     price = models.FloatField()

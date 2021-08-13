@@ -40,6 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'rest_framework',
+    'author.apps.AuthorConfig',
+    'publisher.apps.PublisherConfig',
+    'genre.apps.GenreConfig',
+    'book.apps.BookConfig',
+    'customer.apps.CustomerConfig',
+    'order.apps.OrderConfig',
+    'review.apps.ReviewConfig',
+    'employee.apps.EmployeeConfig'
 ]
 
 REST_FRAMEWORK = {

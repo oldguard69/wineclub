@@ -7,6 +7,6 @@ class Customer(models.Model):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(blank=True, max_length=15)
     address = models.TextField(blank=True)
-    password = models.CharField()
+    password = models.CharField(max_length=200)
     date_join = models.DateField(auto_now_add=True)
     favorite_books = models.ManyToManyField(Book)

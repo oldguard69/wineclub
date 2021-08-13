@@ -9,7 +9,7 @@ from author.models import Author
 # Create your models here.
 class Book(models.Model):
     isbn = models.CharField(max_length=13, unique=True)
-    title = models.CharField()
+    title = models.CharField(max_length=300)
     description = models.TextField(blank=True)
     quanity = models.IntegerField()
     price = models.FloatField()
@@ -29,4 +29,4 @@ class Book(models.Model):
 
 class BookImage(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    image_url = models.CharField()
+    image_url = models.CharField(max_length=500)
