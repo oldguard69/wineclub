@@ -1,0 +1,33 @@
+|   manage.py
+|   
++---book_api
+|   |   asgi.py
+|   |   config.py
+|   |   settings.py
+|   |   urls.py
+|   |   wsgi.py
+|   |   __init__.py
+|   |   
+|           
++---management
+|   |   admin.py
+|   |   apps.py
+|   |   models.py
+|   |   tests.py
+|   |   views.py
+|   |   __init__.py
+|   |   
+|   \---migrations
+|           __init__.py
+|           
+\---public
+    |   admin.py
+    |   apps.py
+    |   models.py
+    |   tests.py
+    |   views.py
+    |   __init__.py
+    |   
+    \---migrations
+            __init__.py
+            
