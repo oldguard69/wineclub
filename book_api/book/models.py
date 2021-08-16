@@ -27,6 +27,9 @@ class Book(models.Model):
                 )
     author = models.ManyToManyField(Author)
 
+    class Meta:
+        ordering = ['id']
+
 class BookImage(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     image_url = models.CharField(max_length=500)

@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework import generics, viewsets
 
-# Create your views here.
+from genre.models import Genre
+from genre.serializers import GenreSerializer
+
+
+class GenreViewSet(viewsets.ModelViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer

@@ -7,4 +7,7 @@ class Author(models.Model):
     info = models.TextField(blank=True)
 
     class Meta:
-        ordering = ['fullname']
+        ordering = ['id']
+
+    def __str__(self):
+        return self.fullname

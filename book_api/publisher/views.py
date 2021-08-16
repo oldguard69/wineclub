@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import generics, viewsets
 
-# Create your views here.
+from publisher.serializer import PublisherSerializer
+from publisher.models import Publisher
+
+class PublisherViewSet(viewsets.ModelViewSet):
+    queryset = Publisher.objects.all()
+    serializer_class = PublisherSerializer
