@@ -30,6 +30,9 @@ class Book(models.Model):
     class Meta:
         ordering = ['id']
 
+    def __str__(self):
+        return f'{self.isbn} -- {self.title}'
+
 class BookImage(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     image_url = models.CharField(max_length=500)
