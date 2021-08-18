@@ -1,4 +1,6 @@
 from django.db import models
+
+
 from book.models import Book
 
 # Create your models here.
@@ -9,6 +11,7 @@ class Customer(models.Model):
     address = models.TextField(blank=True)
     password = models.CharField(max_length=200)
     date_join = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
     favorite_books = models.ManyToManyField(Book)
 
     class Meta:

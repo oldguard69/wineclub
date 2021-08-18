@@ -6,8 +6,8 @@ class BookFilter(django_filters.FilterSet):
     genre = django_filters.CharFilter('genre__name', 'icontains')
     publisher = django_filters.CharFilter('publisher__name', 'icontains')
     author = django_filters.CharFilter('author__fullname', 'icontains')
-    isbn = django_filters.CharFilter('isbn', 'contains')
+    # isbn = django_filters.CharFilter('isbn', 'contains')
 
     class Meta:
         model = Book
-        fields = ['title', 'isbn']
+        fields = ['isbn'] # genrerate exact lookup for isbn
