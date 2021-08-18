@@ -55,10 +55,9 @@ class Register(APIView):
         serializer = CustomerSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data    
-            try:
-                customer = Customer.objects.get(email=data.get('email'))
+            if Customer.objects.filter(email=data.get('email')).exists():
                 return Response({'msg': 'Email has been used'}, status.HTTP_200_OK)
-            except Customer.DoesNotExist:
+            else:
                 hash_pw = make_password(data.get('password'))
                 data["password"] = hash_pw
                 result = serializer.create(data)

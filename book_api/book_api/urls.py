@@ -26,7 +26,8 @@ urlpatterns = [
     path('', include('publisher.urls')),
     path('', include('author.urls')),
     path('', include('book.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('', include('customer.urls'))
+    path('', include('customer.urls')),
+    path('', include('employee.urls'))
 ]

@@ -17,7 +17,7 @@ class CustomerSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 customer = Customer.objects.create(**validated_data)
                 customer.save()
-                cart = Cart.objects.create(total_amount=10, customer=customer)
+                cart = Cart.objects.create(total_amount=0, customer=customer)
                 cart.save()
                 return customer
         except IntegrityError:
@@ -26,3 +26,8 @@ class CustomerSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
+
+class ChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField()
+    new_password = serializers.CharField()
+    confirm_new_password = serializers.CharField()

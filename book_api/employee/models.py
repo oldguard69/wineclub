@@ -15,4 +15,10 @@ class Employee(models.Model):
     phone_number = models.CharField(max_length=15, blank=True)
     password = models.CharField(max_length=200)
     salary = models.FloatField()
-    role = models.ForeignKey(Role, on_delete=models.PROTECT)
+    # role = models.ForeignKey(Role, on_delete=models.PROTECT)
+
+    ROLE_CHOICES = [
+        ('emp', 'Employee'),
+        ('admin', 'Admin'),
+    ]
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='emp')
