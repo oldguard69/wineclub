@@ -1,11 +1,12 @@
 from django.db import IntegrityError, transaction
 from rest_framework import serializers
+from rest_framework.fields import ReadOnlyField
 
 from customer.models import Customer
 from book.serializers import BookSerializer
 from cart.models import Cart
 
-class CustomerSerializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
     favorite_books = BookSerializer(read_only=True, many=True)
     
     class Meta:
@@ -22,6 +23,20 @@ class CustomerSerializer(serializers.ModelSerializer):
                 return customer
         except IntegrityError:
             return 'error'
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        exclude = ('password', 'favorite_books')
+
+class CustomerProfileSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(read_only=True)
+    date_join = serializers.DateField(read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Customer
+        exclude = ('favorite_books', 'password')
         
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()

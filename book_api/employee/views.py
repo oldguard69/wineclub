@@ -1,15 +1,15 @@
 from django.contrib.auth.hashers import check_password, make_password
-from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import serializers, status, viewsets
+from rest_framework import status, viewsets
 from django.db import transaction
+
 
 from customer.serializers import LoginSerializer, ChangePasswordSerializer
 from employee.models import Employee
 from employee.serializers import EmployeeSerializer
-from employee.permission import AdminPermission
+from employee.permission import HasAdminPermission, IsEmployee
 
 
 class EmployeeLogin(APIView):
@@ -41,7 +41,7 @@ class EmployeeLogin(APIView):
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
-    permission_classes = [IsAuthenticated, AdminPermission]
+    permission_classes = [HasAdminPermission]
 
     def list(self, request, *args, **kwargs):
         if hasattr(request.auth, 'payload'):
@@ -57,7 +57,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
 
 class EmployeeChangePassword(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsEmployee]
 
     def post(self, request, format=None):
         serializer = ChangePasswordSerializer(data=request.data)

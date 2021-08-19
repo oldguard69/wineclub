@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from rest_framework.decorators import permission_classes
 
 from book.models import Book, BookImage
 from publisher.serializers import PublisherSerializer
