@@ -11,7 +11,10 @@ urlpatterns = [
     path('', include(CustomerListRetrievRouter.urls)),
     path('customers/<int:pk>/activate', views.ActivateCustomer.as_view()),
     path('customers/<int:pk>/block', views.BlockCustomer.as_view()),
+    # public
     path('customer-profile/', views.CustomerProfile.as_view()),
     path('register/', views.Register.as_view()),
-    path('login/', views.Login.as_view())
+    path('login/', views.Login.as_view()),
+    path('request-update-email/', views.RequestChangeEmail.as_view()),
+    path('verify-update-email/', views.VerifyChangeEmail.as_view())
 ]

@@ -47,5 +47,9 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField()
     confirm_new_password = serializers.CharField()
 
-class RequestChangeEmailSerializer(serializers.Serializer):
+class RequestUpdateEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
+
+class VerifyUpdateEmailSerializer(serializers.Serializer):
+    verify_code = serializers.UUIDField()
+    request_id = serializers.IntegerField()

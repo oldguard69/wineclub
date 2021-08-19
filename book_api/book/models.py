@@ -11,7 +11,7 @@ class Book(models.Model):
     isbn = models.CharField(max_length=13, unique=True)
     title = models.CharField(max_length=300)
     description = models.TextField(blank=True)
-    quanity = models.IntegerField()
+    quantity = models.IntegerField()
     price = models.FloatField()
     genre = models.ForeignKey(
                 Genre, 
