@@ -7,11 +7,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django_filters import rest_framework as filters
+import uuid
+from datetime import datetime, timedelta
+from django.core.mail import send_mail
 
-
-from customer.models import Customer
+from book_api import config
+from customer.models import Customer, UpdateEmailCode
 from customer.serializers import (CustomerSerializer, LoginSerializer, 
-                                  CustomerProfileSerializer, RegisterSerializer)
+                                  CustomerProfileSerializer, RegisterSerializer,
+                                  RequestChangeEmailSerializer)
 from customer.filters import CustomerFilter
 from employee.permission import HasAdminPermission
 
@@ -129,3 +133,44 @@ class CustomerProfile(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status.HTTP_200_OK)
+
+
+class RequestChangeEmail(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    # body: email
+    # response: UpdateEmailCode.id
+    def post(self, request):
+        serializer = RequestChangeEmailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_email = serializer.validated_data.get('email')
+        customer = Customer.objects.get(id=request.auth.payload.get('user_id'))
+        if Customer.objects.filter(email=new_email).exists():
+            return Response({'msg': 'Email is already used'})
+        else:
+            expiry_date = datetime.now() + timedelta(minutes=30)
+            verify_code = uuid.uuid4()
+            code = UpdateEmailCode(
+                current_email=customer.email,
+                new_email=new_email,
+                verify_code=verify_code,
+                expiry_date=expiry_date
+            )
+            send_mail(
+                'Verify email',
+                f'Your verify code is {verify_code}\n The verify code will be expired in 30 minutes',
+                config.email,
+                [new_email],
+                fail_silently=False,
+            )
+            code.save()
+            return Response({'id': code.id}, status.HTTP_200_OK)
+
+
+class VerifyChangeEmail(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    # body: {verify_code, id} where id is UpdateEmailCode's id
+    # Response: {msg}
+    def post(self, request):
+        pass

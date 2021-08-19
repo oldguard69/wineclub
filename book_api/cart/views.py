@@ -100,6 +100,7 @@ class DeleteCartItem(generics.DestroyAPIView):
 class MergeCart(APIView):
     permission_classes = (IsAuthenticated,)
 
+    # request.data: {items: [{book_id, order_quantity}]}
     def post(self, request):
         serializer = CartItemListSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

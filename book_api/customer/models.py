@@ -19,3 +19,9 @@ class Customer(models.Model):
 
     def __str__(self):
         return f'{self.fullname} - {self.email}'
+
+class UpdateEmailCode(models.Model):
+    current_email = models.EmailField()
+    new_email = models.EmailField()
+    verify_code = models.UUIDField()
+    expiry_date = models.DateTimeField()
