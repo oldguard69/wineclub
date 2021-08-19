@@ -1,4 +1,3 @@
-from customer.serializer import LoginSerializer
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 
 
 from customer.models import Customer
-from customer.serializer import CustomerSerializer
+from customer.serializers import CustomerSerializer, LoginSerializer
 
 
 # Create your views here.
@@ -50,6 +49,7 @@ class Login(APIView):
                 )
 
 
+# TODO: create stripe Customer and save it along with our Customer model
 class Register(APIView):
     def post(self, request, format=None):
         serializer = CustomerSerializer(data=request.data)

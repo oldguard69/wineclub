@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 import django_filters
 
-from publisher.serializer import PublisherSerializer
+from publisher.serializers import PublisherSerializer
 from publisher.models import Publisher
 
 class PublisherFilter(django_filters.FilterSet):

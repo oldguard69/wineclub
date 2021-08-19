@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 import django_filters
 from author.models import Author
-from author.serializer import AuthorSerializer
+from author.serializers import AuthorSerializer
 
 class AuthorFilter(django_filters.FilterSet):
     fullname = django_filters.CharFilter('fullname', 'icontains')

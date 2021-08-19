@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import serializers, status, viewsets
 from django.db import transaction
 
-from customer.serializer import LoginSerializer, ChangePasswordSerializer
+from customer.serializers import LoginSerializer, ChangePasswordSerializer
 from employee.models import Employee
 from employee.serializers import EmployeeSerializer
 from employee.permission import AdminPermission

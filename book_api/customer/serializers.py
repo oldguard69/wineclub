@@ -2,7 +2,7 @@ from django.db import IntegrityError, transaction
 from rest_framework import serializers
 
 from customer.models import Customer
-from book.serializer import BookSerializer
+from book.serializers import BookSerializer
 from cart.models import Cart
 
 class CustomerSerializer(serializers.ModelSerializer):

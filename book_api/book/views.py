@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django_filters import rest_framework as filters
 
 from book.models import Book
-from book.serializer import BookSerializer, BookUpdateSerializer
+from book.serializers import BookSerializer, BookUpdateSerializer
 from genre.models import Genre
 from publisher.models import Publisher
 from book.filter import BookFilter
