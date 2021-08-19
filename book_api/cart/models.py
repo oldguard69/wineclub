@@ -4,7 +4,6 @@ from django.db import models
 
 # Create your models here.
 class Cart(models.Model):
-    total_amount = models.FloatField()
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
     books = models.ManyToManyField(Book, through='CartItem')
 
