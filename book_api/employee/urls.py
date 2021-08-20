@@ -9,7 +9,5 @@ router = DefaultRouter()
 router.register(r'employees', views.EmployeeViewSet)
 
 urlpatterns = [
-    path('employee-login', views.EmployeeLogin.as_view()),
     path('', include(router.urls)),
-    path('employee-change-password', views.EmployeeChangePassword.as_view())
 ]

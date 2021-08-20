@@ -6,36 +6,12 @@ from rest_framework import status, viewsets
 from django.db import transaction
 
 
-from customer.serializers import LoginSerializer, ChangePasswordSerializer
+# from customer.serializers import LoginSerializer, ChangePasswordSerializer
+from book_api.helpers import get_validated_data
 from employee.models import Employee
 from employee.serializers import EmployeeSerializer
 from employee.permission import HasAdminPermission, IsEmployee
-
-
-class EmployeeLogin(APIView):
-    def post(self, request, format=None):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            validated_data = serializer.validated_data
-            try:
-                emp = Employee.objects.get(email=validated_data.get('email'))
-                if check_password(validated_data.get('password'), emp.password):
-                    refresh = RefreshToken.for_user(emp)
-                    refresh['role'] = emp.role
-                    return Response(
-                        {'refresh': str(refresh), 'access': str(refresh.access_token)},
-                        status.HTTP_200_OK
-                    )
-                else:
-                    return Response(
-                        {'msg': 'Password is incorrect.'}, 
-                        status.HTTP_400_BAD_REQUEST
-                    )
-            except Employee.DoesNotExist:
-                return Response(
-                    {'msg': 'Account with the given email does not exist'}, 
-                    status.HTTP_401_UNAUTHORIZED
-                )
+from user.models import User
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
@@ -50,37 +26,17 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-        raw_password = request.data.get('password')
-        hash_pw = make_password(raw_password)
-        request.data["password"] = hash_pw
-        return super().create(request, *args, **kwargs)
+        data, serializer = get_validated_data(EmployeeSerializer, request)
+        if User.objects.filter(email=data.get('email')).exists():
+            return Response({'msg': 'Email has been used'}, status.HTTP_200_OK)
+        else:
+            result = serializer.create(data)
+            if result == 'error':
+                return Response(
+                    data={'msg': 'Server error. Please try again later'},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+            return Response({'msg': 'Account created successfully'}, status.HTTP_200_OK)
 
 
-class EmployeeChangePassword(APIView):
-    permission_classes = [IsEmployee]
 
-    def post(self, request, format=None):
-        serializer = ChangePasswordSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            validated_data = serializer.validated_data
-            empid = request.auth.payload.get('user_id')
-            try:
-                emp = Employee.objects.get(id=empid)
-                if not check_password(validated_data.get('password'), emp.password):
-                    return Response(
-                        {'msg': 'Your current password is incorrect.'},
-                        status.HTTP_400_BAD_REQUEST
-                    )
-                else:
-                    if validated_data.get('new_password') != validated_data.get('confirm_new_password'):
-                        return Response(
-                            {'msg': 'Your new password and its confirm does not match.'},
-                            status.HTTP_400_BAD_REQUEST
-                        )
-                    else:
-                        hash_pw = make_password(validated_data.get('new_password'))
-                        emp.password = hash_pw
-                        emp.save()
-                        return Response({'msg': 'Your password has been changed'})
-            except Employee.DoesNotExist:
-                return Response({'msg': 'Accout does not exist'}, status.HTTP_401_UNAUTHORIZED)

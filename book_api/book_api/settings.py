@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+AUTH_USER_MODEL = 'user.User'
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'publisher.apps.PublisherConfig',
     'genre.apps.GenreConfig',
     'book.apps.BookConfig',
+    'user.apps.UserConfig',
     'customer.apps.CustomerConfig',
     'order.apps.OrderConfig',
     'review.apps.ReviewConfig',
