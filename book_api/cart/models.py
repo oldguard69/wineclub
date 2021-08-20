@@ -22,4 +22,4 @@ class CartItem(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return f'{self.cart.id} -- {self.book.isbn} -- {self.order_quantity}'
+        return f'cart_id: {self.cart.id} || {self.book.isbn} -- {self.order_quantity}'
