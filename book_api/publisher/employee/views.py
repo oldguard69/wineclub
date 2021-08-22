@@ -1,16 +1,14 @@
-from rest_framework import viewsets
+from rest_framework.viewsets import ModelViewSet
 import django_filters
 
-from publisher.serializers import PublisherSerializer
+from .serializers import PublisherSerializer
 from publisher.models import Publisher
 
 class PublisherFilter(django_filters.FilterSet):
     name = django_filters.CharFilter('name', 'icontains')
-    class Meta:
-        model = Publisher
-        fields = ['name']
+    
 
-class PublisherViewSet(viewsets.ModelViewSet):
+class PublisherViewSet(ModelViewSet):
     queryset = Publisher.objects.all()
     serializer_class = PublisherSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)

@@ -1,16 +1,11 @@
-from django.contrib.auth.hashers import check_password, make_password
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from django.db import transaction
 
-
-# from customer.serializers import LoginSerializer, ChangePasswordSerializer
 from book_api.helpers import get_validated_data
 from employee.models import Employee
-from employee.serializers import EmployeeSerializer
-from employee.permission import HasAdminPermission, IsEmployee
+from .serializers import EmployeeSerializer
+from employee.permission import HasAdminPermission
 from user.models import User
 
 
@@ -19,10 +14,6 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     serializer_class = EmployeeSerializer
     permission_classes = [HasAdminPermission]
 
-    def list(self, request, *args, **kwargs):
-        if hasattr(request.auth, 'payload'):
-            print(request.auth.payload)
-        return super().list(request, *args, **kwargs)
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):

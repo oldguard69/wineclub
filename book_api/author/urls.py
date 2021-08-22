@@ -1,7 +1,7 @@
-from rest_framework.routers import DefaultRouter
-from author.views import AuthorViewSet
+from django.urls import path, include
 
-router = DefaultRouter()
-router.register(r'authors', AuthorViewSet)
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('', include('author.employee.urls')),
+    path('', include('author.customer.urls')),
+]

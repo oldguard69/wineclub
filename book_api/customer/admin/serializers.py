@@ -1,7 +1,7 @@
-from employee.serializers import UserSerializer
 from rest_framework import serializers
 
 from customer.models import Customer
+from employee.admin.serializers import UserSerializer
 
 class CustomerSerializer(serializers.ModelSerializer):
     user = UserSerializer()

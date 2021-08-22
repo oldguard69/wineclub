@@ -1,8 +1,6 @@
-from rest_framework.routers import DefaultRouter
+from django.urls import path, include
 
-from publisher import views
-
-router = DefaultRouter()
-router.register(r'publishers', views.PublisherViewSet)
-
-urlpatterns = router.urls
+urlpatterns = [
+    path('', include('publisher.customer.urls')),
+    path('', include('publisher.employee.urls'))
+]

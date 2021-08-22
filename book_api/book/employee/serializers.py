@@ -1,11 +1,10 @@
 from rest_framework import serializers
-from rest_framework.decorators import permission_classes
 
 from book.models import Book, BookImage
-from publisher.serializers import PublisherSerializer
-from author.serializers import AuthorSerializer
-from genre.serializers import GenreSerializer
-
+from publisher.employee.serializers import PublisherSerializer
+from author.employee.serializers import AuthorSerializer
+from genre.employee.serializers import GenreSerializer
+from employee.permission import IsEmployee
 
 # genre, publisher, author property are their id
 class BookUpdateSerializer(serializers.ModelSerializer):
@@ -15,6 +14,7 @@ class BookUpdateSerializer(serializers.ModelSerializer):
 
 # genre, publisher, author property are object
 class BookSerializer(BookUpdateSerializer):
+    permission_classes = [IsEmployee]
     publisher = PublisherSerializer(read_only=True)
     author = AuthorSerializer(many=True, read_only=True)
     genre = GenreSerializer(read_only=True)

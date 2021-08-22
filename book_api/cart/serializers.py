@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from cart.models import Cart, CartItem
 from book.models import Book
-from book.serializers import BookSerializer
+from book.customer.serializers import BookSerializer
 
 
 class CartSerializer(serializers.ModelSerializer):

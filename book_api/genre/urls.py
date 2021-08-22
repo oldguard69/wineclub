@@ -1,8 +1,6 @@
-from django.urls import path
-from genre.views import GenreViewSet
-from rest_framework.routers import DefaultRouter
+from django.urls import path, include
 
-router = DefaultRouter()
-router.register(r'genres', GenreViewSet)
-
-urlpatterns = router.urls
+urlpatterns = [
+    path('', include('genre.customer.urls')),
+    path('', include('genre.employee.urls'))
+]
