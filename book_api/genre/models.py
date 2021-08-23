@@ -1,7 +1,8 @@
 from django.db import models
 
-# Create your models here.
-class Genre(models.Model):
+from soft_deletion.models import SoftDeletionModel
+
+class Genre(SoftDeletionModel):
     name = models.CharField(unique=True, max_length=200)
 
     class Meta:

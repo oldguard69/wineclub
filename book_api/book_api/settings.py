@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'review.apps.ReviewConfig',
     'employee.apps.EmployeeConfig',
     'cart.apps.CartConfig',
-    'payment.apps.PaymentConfig'
+    'payment.apps.PaymentConfig',
+    'soft_deletion.apps.SoftDeletionConfig'
 ]
 
 REST_FRAMEWORK = {

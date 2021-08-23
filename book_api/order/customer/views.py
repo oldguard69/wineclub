@@ -1,17 +1,24 @@
-from book_api.order.customer.serializers import OrderSerializer
-from rest_framework import serializers, status
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from django.db import transaction
 from django.db.utils import IntegrityError
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-
+from order.models import Order
+from .serializers import OrderSerializer
 from cart.models import CartItem, Cart
 from book.models import Book
 from order.models import Order, OrderDetail
 from customer.models import Customer
-# Create your views here.
+
+class OrderViewSet(ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+
 class CreateOrder(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -51,6 +58,7 @@ class CreateOrder(APIView):
                     book.save()
                 order.total_price = total_price
                 order.save()
+
                 serializer = OrderSerializer(data=order)
                 serializer.is_valid()
                 return Response(serializer.data)

@@ -1,7 +1,7 @@
 from django.db import models
+from soft_deletion.models import SoftDeletionModel
 
-# Create your models here.
-class Publisher(models.Model):
+class Publisher(SoftDeletionModel):
     name = models.CharField(unique=True, max_length=200)
 
     class Meta:

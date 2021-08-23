@@ -1,7 +1,8 @@
 from django.db import models
 
-# Create your models here.
-class Author(models.Model):
+from soft_deletion.models import SoftDeletionModel
+
+class Author(SoftDeletionModel):
     fullname = models.CharField(max_length=200)
     data_of_birth = models.DateField(blank=True, null=True)
     info = models.TextField(blank=True)

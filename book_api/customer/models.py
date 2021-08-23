@@ -2,12 +2,13 @@ from django.db import models
 
 from book.models import Book
 from user.models import User
+from soft_deletion.models import SoftDeletionModel
 
 
-class Customer(models.Model):
+class Customer(SoftDeletionModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     favorite_books = models.ManyToManyField(Book)
-    # stripe_customer_id = models.CharField(max_length=100, blank=True)
+    stripe_customer_id = models.CharField(max_length=100, blank=True)
 
     class Meta:
         ordering = ['id']
