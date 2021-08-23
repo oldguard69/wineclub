@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from . import config
 from datetime import timedelta
+import os
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,7 +56,8 @@ INSTALLED_APPS = [
     'order.apps.OrderConfig',
     'review.apps.ReviewConfig',
     'employee.apps.EmployeeConfig',
-    'cart.apps.CartConfig'
+    'cart.apps.CartConfig',
+    'payment.apps.PaymentConfig'
 ]
 
 REST_FRAMEWORK = {
@@ -140,9 +145,9 @@ WSGI_APPLICATION = 'book_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config.db_name,
-        'USER': config.db_username,
-        'PASSWORD': config.db_password,
+        'NAME': os.getenv('db_name'),
+        'USER': os.getenv('db_username'),
+        'PASSWORD': os.getenv('db_password'),
         'HOST': 'localhost',
         'PORT': '',
     }

@@ -1,40 +1,28 @@
+import os
+import uuid
 from django.db import transaction
 from django.http.response import Http404
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-import uuid
 from datetime import timedelta
 from django.db.utils import IntegrityError
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from django.core.mail import send_mail
+from dotenv import load_dotenv, find_dotenv
 
-from book_api import config
 from user.serializers import (
-    LoginSerializer, RegisterSerializer, 
-    RequestUpdateEmailSerializer, VerifyUpdateEmailSerializer,
-    UserProfileSerializer
-    )
+    LoginSerializer, RequestUpdateEmailSerializer, 
+    VerifyUpdateEmailSerializer, UserProfileSerializer
+)
 from book_api.helpers import get_validated_data, get_user_id
 from user.models import User, UpdateEmailVerifyCode
 from employee.models import Employee
 
-# TODO: create stripe Customer and save it along with our Customer model
-class Register(APIView):
-    def post(self, request, format=None):
-        data, serializer = get_validated_data(RegisterSerializer, request)
-        if User.objects.filter(email=data.get('email')).exists():
-            return Response({'msg': 'Email has been used'}, status.HTTP_200_OK)
-        else:
-            result = serializer.create(data)
-            if result == 'error':
-                return Response(
-                    data={'msg': 'Server error. Please try again later'},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
-            return Response({'msg': 'Account created successfully'}, status.HTTP_200_OK)
+load_dotenv(find_dotenv())
+
 
 
 class Login(APIView):
@@ -89,7 +77,7 @@ class RequestUpdateEmail(APIView):
         send_mail(
             'Verify email',
             f'Your verify code is {verify_code}\n The verify code will be expired in 30 minutes',
-            config.email,
+            os.getenv('email'),
             [new_email],
             fail_silently=False,
         )
@@ -160,33 +148,3 @@ class UserProfile(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status.HTTP_200_OK)
-
-
-# class EmployeeChangePassword(APIView):
-#     permission_classes = [IsEmployee]
-
-#     def post(self, request, format=None):
-#         serializer = ChangePasswordSerializer(data=request.data)
-#         if serializer.is_valid(raise_exception=True):
-#             validated_data = serializer.validated_data
-#             empid = request.auth.payload.get('user_id')
-#             try:
-#                 emp = Employee.objects.get(id=empid)
-#                 if not check_password(validated_data.get('password'), emp.password):
-#                     return Response(
-#                         {'msg': 'Your current password is incorrect.'},
-#                         status.HTTP_400_BAD_REQUEST
-#                     )
-#                 else:
-#                     if validated_data.get('new_password') != validated_data.get('confirm_new_password'):
-#                         return Response(
-#                             {'msg': 'Your new password and its confirm does not match.'},
-#                             status.HTTP_400_BAD_REQUEST
-#                         )
-#                     else:
-#                         hash_pw = make_password(validated_data.get('new_password'))
-#                         emp.password = hash_pw
-#                         emp.save()
-#                         return Response({'msg': 'Your password has been changed'})
-#             except Employee.DoesNotExist:
-#                 return Response({'msg': 'Accout does not exist'}, status.HTTP_401_UNAUTHORIZED)

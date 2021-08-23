@@ -12,29 +12,6 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
 
-# this view work for customer
-# employee will get another view
-class RegisterSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'password', 'email', 'address', 'phone_number']
-
-    def create(self, validated_data):
-        try:
-            with transaction.atomic():
-                password = validated_data.pop('password')
-                user = User.objects.create(**validated_data)
-                user.set_password(password)
-                user.save()
-                customer = Customer.objects.create(user=user)
-                customer.save()
-                cart = Cart.objects.create(customer=customer)
-                cart.save()
-                return user
-        except IntegrityError:
-            return 'error'
-
 
 class ChangePasswordSerializer(serializers.Serializer):
     password = serializers.CharField()
