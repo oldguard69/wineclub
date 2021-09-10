@@ -1,3 +1,6 @@
+from django.db.models.fields import CharField
+from user.models import User
+from customer.models import Customer
 from rest_framework import serializers
 
 
@@ -18,4 +21,21 @@ class MembershipProgramSerializer(serializers.ModelSerializer):
         if value < 0 or value > 100:
             raise serializers.ValidationError(errors.DISCOUNT_PECENTAGE_ERROR)
         return value
+
+
+class UserSerialier(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+
+class MembershipCustomerListSerializer(serializers.ModelSerializer):
+    user = UserSerialier()
     
+    class Meta:
+        model = Customer
+        fields = ['user', 'favorite_region', 'favorite_wine_type']
+
+
+class CustomerIdSerializer(serializers.Serializer):
+    customer_id = serializers.CharField()

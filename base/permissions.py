@@ -28,10 +28,22 @@ class IsCustomer(permissions.IsAuthenticated):
     def has_permission(self, request, view):
         return super().has_permission(request, view) and get_role(request) == CUSTOMER_ROLE
 
-# TODO: check if user carry in JWT own  business id
+# # TODO: check if user carry in JWT own  business id
+# class IsBusinessOwner(permissions.IsAuthenticated):
+#     def has_permission(self, request, view):
+#         businesses = Business.objects.filter(user__id=request.user.id).values('id')
+#         business_ids = set([i['id'] for i in businesses])
+#         business_url_param = view.kwargs['business_id']
+#         return super().has_permission(request, view) and business_url_param in business_ids
+
+
 class IsBusinessOwner(permissions.IsAuthenticated):
     def has_permission(self, request, view):
         businesses = Business.objects.filter(user__id=request.user.id).values('id')
         business_ids = set([i['id'] for i in businesses])
         business_url_param = view.kwargs['business_id']
-        return super().has_permission(request, view) and business_url_param in business_ids
+        return (
+            super().has_permission(request, view) 
+            and get_role(request) == RETAILER_ROLE
+            and business_url_param in business_ids
+        )

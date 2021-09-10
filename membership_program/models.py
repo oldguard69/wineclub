@@ -26,7 +26,7 @@ class MembershipProgram(SoftDeletionModel):
 #       Customer.objects.filter(membership__joined=True)
 class Membership(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    membership = models.ForeignKey(MembershipProgram, on_delete=models.CASCADE)
+    membership_program = models.ForeignKey(MembershipProgram, on_delete=models.CASCADE)
     date_join = models.DateTimeField(null=True)
     date_request = models.DateTimeField(null=True)
     joined = models.BooleanField(default=False)

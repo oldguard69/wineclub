@@ -6,7 +6,10 @@ def LOG(content):
     print(f'{file}: {content}')
 
 def get_validated_data(serializer, request, raise_exception=True):
-    '''Return (validated_data, serializer_instance)'''
+    '''
+    Create serializer instance and valid request.data
+    Return (validated_data, serializer_instance)
+    '''
     s = serializer(data=request.data)
     s.is_valid(raise_exception=raise_exception)
     return (s.validated_data, s)
