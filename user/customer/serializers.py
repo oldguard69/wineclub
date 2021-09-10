@@ -27,7 +27,9 @@ class RegisterSerializer(serializers.ModelSerializer):
                 user.set_password(password)
                 user.save()
 
-                stripe_customer = stripe.Customer.create()
+                stripe_customer = stripe.Customer.create(
+                    email=validated_data.get('email')
+                )
                 customer = Customer.objects.create(
                     user=user, 
                     stripe_customer_id=stripe_customer['id']

@@ -21,26 +21,31 @@ class BusinessViewSet(ModelViewSet):
         validated_data, serializer = get_validated_data(
             BusinessCreateSerializer, request
         )
-        if Business.objects.filter(email=validated_data.get('email')).exists():
-            return Response(response_message(errors.EMAIL_IS_USED), status.HTTP_200_OK)
-        else:
-            result = serializer.save(user=request.user)
-            if result == 'error':
-                return Response(
-                    response_message(errors.SERVER_ERROR),
-                    status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
-            return Response(response_message(notices.ACCOUNT_CREATED), status.HTTP_200_OK)
+        result = serializer.save(user=request.user)
+        if result == 'error':
+            return Response(
+                response_message(errors.SERVER_ERROR),
+                status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        return Response(response_message(notices.ACCOUNT_CREATED), status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
-        business = get_object_or_404(Business, user__id=request.user.id)
+        return super().update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        business = get_object_or_404(Business, id=kwargs['pk'])
         serializer = BusinessSerializer(business, request.data)
         if serializer.is_valid(True):
             validated_data = serializer.validated_data
-            if Business.objects.filter(email=validated_data.get('email')).exists():
-                return Response(response_message(errors.EMAIL_IS_USED), status.HTTP_200_OK)
+            if is_email_invalid_for_update(business, validated_data):
+                return Response(response_message(errors.EMAIL_IS_USED), status.HTTP_400_BAD_REQUEST)
             else:
                 result = serializer.save()
                 if result == 'error':
                     return Response(response_message(errors.SERVER_ERROR), status.HTTP_500_INTERNAL_SERVER_ERROR)
                 return Response(response_message(notices.PROFILE_UPDATED), status.HTTP_200_OK)
+
+
+def is_email_invalid_for_update(business, validated_data):
+    email = validated_data.get('email')
+    return business.email != email and Business.objects.filter(email=email).exists()

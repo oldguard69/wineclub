@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.db import transaction
 from django.db.utils import IntegrityError
+from rest_framework.exceptions import ValidationError
 import stripe
 import os
 
@@ -52,8 +53,8 @@ class BusinessCreateSerializer(serializers.ModelSerializer):
                 )
                 
                 return business
-        except IntegrityError:
-            return 'error'
+        except Exception as e:
+            raise ValidationError(str(e))
 
 
 class BusinessSerializer(serializers.ModelSerializer):
@@ -65,8 +66,9 @@ class BusinessSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         try:
             with transaction.atomic():
+                print(validated_data)
                 instance.phone = validated_data.get('phone', instance.phone)
-                instance.address = validated_data.get('adress', instance.address)
+                instance.address = validated_data.get('address', instance.address)
                 instance.business_category = validated_data.get('business_category', instance.business_category)
                 instance.email = validated_data.get('email', instance.email)
                 instance.save()

@@ -26,5 +26,6 @@ urlpatterns = [
     path('', include('tourism_pass.urls')),
     path('', include('wine.urls')),
     path('', include('reward_program.urls')),
-    path('', include('membership_program.urls'))
+    path('', include('membership_program.urls')),
+    path('', include('business_category.urls'))
 ]
