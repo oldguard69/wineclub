@@ -14,7 +14,7 @@ stripe.api_key = os.getenv('stripe_sk')
 class BusinessProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Business
-        fields = ['email', 'adress', 'phone', 'business_category']
+        fields = ['email', 'address', 'phone', 'business_category']
 
 
 class BusinessCreateSerializer(serializers.ModelSerializer):

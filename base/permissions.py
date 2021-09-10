@@ -1,5 +1,6 @@
 from rest_framework import permissions
-from base.constants import CUSTOMER_ROLE, EMP_ROLE, ADMIN_ROLE, WINERY_ROLE
+from base.constants import CUSTOMER_ROLE, EMP_ROLE, ADMIN_ROLE, WINERY_ROLE, RETAILER_ROLE
+from business.models import Business
 
 def get_role(request):
     return request.auth.payload.get('role')
@@ -18,14 +19,20 @@ class IsEmployee(permissions.IsAuthenticated):
         )
 
 
-class IsWinery(permissions.IsAuthenticated):
+class IsRetailer(permissions.IsAuthenticated):
     def has_permission(self, request, view):
-        return super().has_permission(request, view) and get_role(request) == WINERY_ROLE
+        print(get_role(request))
+        print(view.kwargs['business_id'])
+        return super().has_permission(request, view) and get_role(request) == RETAILER_ROLE
 
 class IsCustomer(permissions.IsAuthenticated):
     def has_permission(self, request, view):
         return super().has_permission(request, view) and get_role(request) == CUSTOMER_ROLE
 
-# class IsBusinessOwner(permissions.IsAuthenticated):
-#     def has_permission(self, request, view):
-#         return super().has_permission(request, view) and get_role == 
+# TODO: check if user carry in JWT own  business id
+class IsBusinessOwner(permissions.IsAuthenticated):
+    def has_permission(self, request, view):
+        businesses = Business.objects.filter(user__id=request.user.id).values('id')
+        business_ids = set([i['id'] for i in businesses])
+        business_url_param = view.kwargs['business_id']
+        return super().has_permission(request, view) and business_url_param in business_ids

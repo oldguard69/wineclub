@@ -3,11 +3,11 @@ import uuid
 
 from reward_program.retailer.serializers import RewardProgramSerialzier
 from business.models import Business
-from base.permissions import IsWinery
+from base.permissions import IsRetailer
 from reward_program.models import RewardProgram
 
 class RewardProgramViewSet(ModelViewSet):
-    permission_classes = [IsWinery]
+    permission_classes = [IsRetailer]
     queryset = RewardProgram.objects.all()
     serializer_class = RewardProgramSerialzier
 
