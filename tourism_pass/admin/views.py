@@ -12,10 +12,10 @@ class TourismPassViewSet(ReadOnlyModelViewSet):
     serializer_class = TourismPassSerializer
 
 
-class TourismPassOfAWinery(ListAPIView):
+class TourismPassOfABusiness(ListAPIView):
     permission_classes = [HasAdminPermission]
     serializer_class = TourismPassSerializer
 
     def get_queryset(self):
         pk = self.kwargs['pk']
-        return TourismPass.objects.filter(winery__id=pk)
+        return TourismPass.objects.filter(business__id=pk)

@@ -12,10 +12,10 @@ class RewardProgramViewSet(ReadOnlyModelViewSet):
     serializer_class = RewardProgramSerializer
 
 
-class RewardProgramOfAWinery(ListAPIView):
+class RewardProgramOfABusiness(ListAPIView):
     permission_classes = [HasAdminPermission]
     serializer_class = RewardProgramSerializer
 
     def get_queryset(self):
         pk = self.kwargs['pk']
-        return RewardProgram.objects.filter(winery__id=pk)
+        return RewardProgram.objects.filter(business__id=pk)

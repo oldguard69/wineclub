@@ -4,7 +4,6 @@ from . import views
 from base.constants import URL_MAPPING_FOR_VIEWSET_DETAIL, URL_MAPPING_FOR_VIEWSET_LIST
 
 wine_list = views.WineViewSet.as_view(URL_MAPPING_FOR_VIEWSET_LIST)
-
 wine_detail = views.WineViewSet.as_view(URL_MAPPING_FOR_VIEWSET_DETAIL)
 
 urlpatterns = [

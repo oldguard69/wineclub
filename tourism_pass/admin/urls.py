@@ -7,5 +7,5 @@ router.register('api/admin/tourism-pass', views.TourismPassViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('api/admin/winery/<int:pk>/tourism-pass', views.TourismPassOfAWinery.as_view())
+    path('api/admin/business/<int:pk>/tourism-pass', views.TourismPassOfABusiness.as_view())
 ]

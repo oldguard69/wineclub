@@ -12,11 +12,11 @@ class WineViewSet(ReadOnlyModelViewSet):
     serializer_class = WineSerializer
 
 
-class WineOfAWinery(ListAPIView):
+class WineOfABusiness(ListAPIView):
     permission_classes = [HasAdminPermission]
     serializer_class = WineSerializer
 
     def get_queryset(self):
         pk = self.kwargs['pk']
-        return Wine.objects.filter(winery__id=pk)
+        return Wine.objects.filter(business__id=pk)
     

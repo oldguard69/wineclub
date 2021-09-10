@@ -7,7 +7,7 @@ from rest_framework import status
 stripe.api_key = os.getenv('stripe_sk')
 
 
-from base.helpers import get_validated_data, get_user_id, response_message
+from base.helpers import get_validated_data, response_message
 from subscription.retailer.serializers import CancelStripeSubscriptionSerializer, CreateStripeSubscriptionSerializer
 from business.models import Business
 
@@ -31,7 +31,7 @@ class CreateSubscription(APIView):
         validated_data, _ = get_validated_data(CreateStripeSubscriptionSerializer, request)
         try:
             price_id = validated_data.get('price_id')
-            winery = Business.objects.get(user__id=get_user_id(request))
+            winery = Business.objects.get(user__id=request.user.id)
             
             subscription = stripe.Subscription.create(
                 customer=winery.stripe_customer_id,

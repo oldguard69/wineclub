@@ -7,5 +7,5 @@ router.register('api/admin/reward-program/', views.RewardProgramViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('api/admin/winery/<int:pk>/reward-program/', views.RewardProgramOfAWinery.as_view())
+    path('api/admin/business/<int:pk>/reward-program/', views.RewardProgramOfABusiness.as_view())
 ]

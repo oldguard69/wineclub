@@ -19,10 +19,9 @@ class IsEmployee(permissions.IsAuthenticated):
         )
 
 
+
 class IsRetailer(permissions.IsAuthenticated):
     def has_permission(self, request, view):
-        print(get_role(request))
-        print(view.kwargs['business_id'])
         return super().has_permission(request, view) and get_role(request) == RETAILER_ROLE
 
 class IsCustomer(permissions.IsAuthenticated):

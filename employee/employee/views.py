@@ -4,7 +4,7 @@ from rest_framework.generics import GenericAPIView
 
 from employee.employee.serializers import EmployeeProfileSerializer, EmployeeProfileUpdateSerializer
 from employee.models import Employee
-from base.helpers import get_user_id, response_message
+from base.helpers import response_message
 from user.models import User
 import base.templates.notice_templates as notices
 
@@ -15,12 +15,12 @@ class EmployeeProfile(GenericAPIView):
     serializer_class = EmployeeProfileSerializer
 
     def get(self, request):
-        employee = Employee.objects.get(user__id=get_user_id(request))
+        employee = Employee.objects.get(user__id=request.user.id)
         serializer = EmployeeProfileSerializer(employee)
         return Response(serializer.data, status.HTTP_200_OK)
 
     def post(self, request):
-        user = User.objects.get(id=get_user_id(request))
+        user = User.objects.get(id=request.user.id)
         serializer = EmployeeProfileUpdateSerializer(user, request.data, )
         if serializer.is_valid(raise_exception=True):
             serializer.save()

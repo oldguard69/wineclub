@@ -3,7 +3,7 @@ from rest_framework.generics import GenericAPIView, get_object_or_404
 from rest_framework import status
 
 from customer.models import Customer
-from base.helpers import get_user_id, get_validated_data, response_message
+from base.helpers import get_validated_data, response_message
 from .serializers import CustomerProfileSerializer, FavoriteRegionSerializer, FavoriteWineTypeSerializer
 import base.templates.error_templates as errors
 import base.templates.notice_templates as notices
